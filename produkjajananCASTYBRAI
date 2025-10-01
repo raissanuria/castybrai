@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CASTYBRAI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #eeb1fa;
+            color: #e71ad6;
+            line-height: 1.6;
+            padding: 20px;
+            overflow-x: hidden; 
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #d645a8, #d676b6);
+            border-radius: 12px;
+            color: rgb(250, 249, 250);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+            gap: 25px;
+            margin-bottom: 40px;
+            justify-content: center;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 3px solid #f1f5f9;
+            background-size: cover; 
+            background-position: center;
+        }
+        
+        .product-info {
+            padding: 20px;
+            text-align: left;
+        }
+        
+        .product-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+        
+        .product-description {
+            color: #64748b;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            min-height: 70px; 
+        }
+        
+        .product-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ba51eb;
+            margin-bottom: 10px;
+            padding-top: 5px;
+            border-top: 1px dashed #f1f5f9;
+        }
+        
+        #contact-area {
+            margin-top: 20px;
+            font-size: 1.1em;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        #contact-button { 
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 15px auto 40px auto;
+            display: block; 
+            width: 90%; 
+            max-width: 350px;
+            transition: background 0.2s ease;
+            font-weight: 600;
+            background-color: #007bff;
+            color: white;
+        }
+        
+        #contact-button:hover {
+            background-color: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* PERUBAHAN CSS UNTUK LINK WHATSAPP */
+        .contact-info a {
+            text-decoration: none; /* Hilangkan garis bawah link */
+            color: #d645a8; /* Samakan warna dengan kontak info sebelumnya */
+            font-size: 1.6em;
+            font-weight: bold;
+            display: block; /* Agar link mengisi area div */
+            padding: 10px;
+            border: 2px dashed #f1f5f9;
+            border-radius: 6px;
+        }
+
+        /* MEDIA QUERY: Menyembunyikan Mendut di layar kecil */
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            #product-3 { 
+                display: none; 
+            }
+        }
+
+        /* KHUSUS UNTUK PRODUK TENGAH/AKHIR */
+        #product-3 { 
+            grid-column: 1 / -1; 
+            max-width: 350px; 
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Gaya Petasan (Tidak berubah, tetap meriah) */
+        .fireworks-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 9999; opacity: 0; transition: opacity 0.5s ease-out; 
+        }
+        .fireworks-container.active { opacity: 1; }
+        .firework {
+            position: absolute; width: 10px; height: 10px; background-color: #ffffff; box-shadow: 0 0 10px rgba(255, 255, 255, 0.8); border-radius: 50%; opacity: 0;
+            animation: ignite 0.3s ease-out forwards, explode 0.5s 0.3s ease-out forwards; transform-origin: center;
+        }
+        .firework::before, .firework::after {
+            content: ''; position: absolute; width: 8px; height: 8px; background-color: currentColor; border-radius: 50%; opacity: 0; animation: spark 0.6s 0.3s ease-out forwards;
+        }
+        .firework.red::before { transform: translate(-12px, -12px); animation-delay: 0.3s; } .firework.blue::after { transform: translate(12px, 12px); animation-delay: 0.4s; }
+        .firework.green::before { transform: translate(12px, -12px); animation-delay: 0.5s; } .firework.purple::after { transform: translate(-12px, 12px); animation-delay: 0.6s; }
+        @keyframes ignite { 0% { transform: scale(0.5); opacity: 0; } 50% { opacity: 1; } 100% { transform: scale(1.5); opacity: 1; } }
+        @keyframes explode { 0% { transform: scale(1.5); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
+        @keyframes spark { 0% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0); } }
+        .firework.red { background-color: #ff3333; } .firework.blue { background-color: #3333ff; } .firework.green { background-color: #33ff33; } .firework.purple { background-color: #a050ff; } .firework.orange { background-color: #ffaa33; }
+        .firework.red::before, .firework.red::after { background-color: #ff3333; } .firework.blue::before, .firework.blue::after { background-color: #3333ff; } .firework.green::before, .firework.green::after { background-color: #33ff33; } .firework.purple::before, .firework.purple::after { background-color: #a050ff; } .firework.orange::before, .firework.orange::after { background-color: #ffaa33; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <header>
+            <h1>🌶️ PRODUK CASTYBRAI 🎀</h1>
+            <p class="subtitle">Daftar harga dan informasi produk hari ini ✨</p>
+        </header>
+
+        <div class="products-grid">
+            
+            <div class="product-card" id="product-1">
+                <div class="product-image" style="background-image: url('1.jpg');" alt="Ayam Geprek"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Ayam geprek</h3>
+                    <p class="product-description">Ayam Geprek plus nasi yang bisa bikin perut kenyang dengan sambal yang super duper membleh kesukaan anak kost nih, JANGAN SAMPAI NGGA KEBAGIAN!!</p>
+                    <p class="product-price">Rp 13.000</p>
+                </div>
+            </div>
+            
+            <div class="product-card" id="product-2">
+                <div class="product-image" style="background-image: url('2.jpg');" alt="Mendut"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Mendut</h3>
+                    <p class="product-description">Makanan tradisional khas Yogyakarta yang nggak kalah bikin ngiler. Udah di Jogja masa belum nyobain sih?</p>
+                    <p class="product-price">Rp 4.000</p>
+                </div>
+            </div>
+
+            <div class="product-card" id="product-3">
+                <div class="product-image" style="background-image: url('3.jpg');" alt="Phone Strap"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Phone Strap Lucu</h3>
+                    <p class="product-description">Aksesoris kekinian untuk mencegah HP jatuh, sekaligus bikin tampilan HP kamu makin *aesthetic*. Pilihan warna random tapi pasti lucu!</p>
+                    <p class="product-price">Rp 8.000</p>
+                </div>
+            </div>
+
+        </div>
+        <button id="contact-button">❓ Butuh Bantuan? Klik Disini</button>
+        <div id="contact-area" class="hidden">
+            <p style="font-size: 1em; margin-top: 15px;">
+                Langsung pesan produk atau tanyakan stok kami melalui WhatsApp:
+            </p>
+            <div class="contact-info">
+                <a href="https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20pesan%20produk%20Castybrai%20berikut%3A%20%5BKetik%20Nama%20Produk%20di%20Sini%5D" target="_blank">
+                    KLIK UNTUK PESAN SEKARANG 📲
+                </a>
+            </div>
+            </div>
+    </div>
+
+    <div id="fireworks-container" class="fireworks-container"></div>
+
+    <script>
+        // FUNGSI UTAMA: MENAMPILKAN KONTAK
+        document.getElementById('contact-button').addEventListener('click', function() {
+            const contactArea = document.getElementById('contact-area');
+            contactArea.classList.toggle('hidden'); 
+
+            if (contactArea.classList.contains('hidden')) {
+                this.textContent = '❓ Butuh Bantuan? Klik Disini';
+            } else {
+                this.textContent = '👆 Tutup Info Kontak';
+            }
+        });
+
+        // ----- Logika Petasan -----
+        const fireworksContainer = document.getElementById('fireworks-container');
+        const colors = ['red', 'blue', 'green', 'purple', 'orange']; 
+
+        function createFirework(x, y) {
+            const firework = document.createElement('div');
+            firework.classList.add('firework');
+            firework.style.left = `${x}px`;
+            firework.style.top = `${y}px`;
+            firework.classList.add(colors[Math.floor(Math.random() * colors.length)]);
+            
+            fireworksContainer.appendChild(firework);
+
+            firework.addEventListener('animationend', () => {
+                firework.remove();
+            });
+        }
+
+        function launchFireworks(count = 15) { 
+            fireworksContainer.classList.add('active'); 
+            for (let i = 0; i < count; i++) {
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight * 0.4;
+                createFirework(x, y);
+            }
+            setTimeout(() => {
+                fireworksContainer.classList.remove('active');
+            }, 1500); 
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            launchFireworks(15); 
+        });
+    </script>
+</body>
+</html>
